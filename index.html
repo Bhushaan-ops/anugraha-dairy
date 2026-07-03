@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anugraha Dairy</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1F4D3D">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Anugraha Dairy">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-dark:#1F4D3D;
+    --green-deep:#163A2E;
+    --paper:#F6F1E4;
+    --paper-dark:#EDE5D0;
+    --steel:#3E5C6B;
+    --gold:#C68A2E;
+    --gold-light:#E0AC52;
+    --red:#A23B2D;
+    --ink:#233029;
+    --ink-soft:#5B6960;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--green-deep);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    min-height:100vh;
+  }
+  .app{
+    max-width:520px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--paper);
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 0 40px rgba(0,0,0,0.4);
+  }
+  header{
+    background:var(--green-dark);
+    color:var(--paper);
+    padding:22px 20px 16px;
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute;
+    right:-30px;
+    top:-30px;
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(230,180,90,0.18) 0%, transparent 70%);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .seal{
+    width:46px;height:46px;border-radius:50%;
+    border:2px solid var(--gold-light);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:18px;
+    color:var(--gold-light);
+    flex-shrink:0;
+  }
+  .brand-text h1{
+    margin:0;
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:22px;
+    letter-spacing:0.3px;
+  }
+  .brand-text p{
+    margin:2px 0 0;
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--gold-light);
+  }
+  nav{
+    display:flex;
+    background:var(--green-deep);
+    padding:0 8px;
+  }
+  nav button{
+    flex:1;
+    background:none;
+    border:none;
+    color:rgba(246,241,228,0.55);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:13px 4px 11px;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    letter-spacing:0.2px;
+  }
+  nav button.active{
+    color:var(--paper);
+    border-bottom-color:var(--gold);
+  }
+  main{
+    flex:1;
+    padding:18px 18px 90px;
+  }
+  .view{display:none;}
+  .view.active{display:block;}
+  .card{
+    background:#fff;
+    border:1px solid var(--paper-dark);
+    border-radius:10px;
+    padding:16px;
+    margin-bottom:14px;
+  }
+  .card h2{
+    font-family:'Fraunces',serif;
+    font-size:16px;
+    margin:0 0 12px;
+    font-weight:600;
+    color:var(--green-dark);
+  }
+  .stat-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .stat{
+    flex:1;
+    background:var(--green-dark);
+    color:var(--paper);
+    border-radius:10px;
+    padding:14px 12px;
+    text-align:left;
+  }
+  .stat.gold{background:var(--gold);}
+  .stat .num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:22px;
+    font-weight:600;
+    display:block;
+  }
+  .stat .lbl{
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.8px;
+    opacity:0.85;
+  }
+  label{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin:10px 0 5px;
+  }
+  input, select{
+    width:100%;
+    padding:10px 12px;
+    border:1.5px solid var(--paper-dark);
+    border-radius:7px;
+    font-size:14.5px;
+    font-family:'IBM Plex Sans',sans-serif;
+    background:#fff;
+    color:var(--ink);
+  }
+  input:focus, select:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+  .row2{display:flex;gap:10px;}
+  .row2>div{flex:1;}
+  button.btn{
+    width:100%;
+    padding:12px;
+    margin-top:14px;
+    background:var(--green-dark);
+    color:var(--paper);
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.3px;
+    cursor:pointer;
+  }
+  button.btn.gold{background:var(--gold); color:var(--green-deep);}
+  button.btn.outline{
+    background:none;
+    border:1.5px solid var(--green-dark);
+    color:var(--green-dark);
+  }
+  .list-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:11px 0;
+    border-bottom:1px solid var(--paper-dark);
+  }
+  .list-item:last-child{border-bottom:none;}
+  .li-main .name{font-weight:600;font-size:14.5px;}
+  .li-main .sub{font-size:12px;color:var(--ink-soft); margin-top:2px;}
+  .li-right{text-align:right;}
+  .li-right .amt{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    color:var(--green-dark);
+  }
+  .icon-btn{
+    background:none;border:none;cursor:pointer;
+    font-size:16px;padding:4px 6px;color:var(--ink-soft);
+  }
+  .empty{
+    text-align:center;
+    padding:30px 10px;
+    color:var(--ink-soft);
+    font-size:13.5px;
+  }
+  .empty .big{font-size:30px;display:block;margin-bottom:8px;}
+  .fab{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    max-width:484px;
+    width:calc(100% - 36px);
+  }
+  .pill-select{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
+  .pill{
+    padding:6px 12px;
+    border-radius:16px;
+    border:1.5px solid var(--paper-dark);
+    background:#fff;
+    font-size:12.5px;
+    cursor:pointer;
+  }
+  .pill.selected{
+    background:var(--green-dark);
+    color:var(--paper);
+    border-color:var(--green-dark);
+  }
+  .modal-bg{
+    display:none;
+    position:fixed;inset:0;
+    background:rgba(20,30,25,0.55);
+    z-index:50;
+    align-items:flex-end;
+    justify-content:center;
+  }
+  .modal-bg.active{display:flex;}
+  .modal{
+    background:var(--paper);
+    width:100%;
+    max-width:520px;
+    border-radius:16px 16px 0 0;
+    padding:20px 20px 26px;
+    max-height:85vh;
+    overflow-y:auto;
+  }
+  .modal h3{
+    font-family:'Fraunces',serif;
+    margin:0 0 4px;
+    color:var(--green-dark);
+  }
+  .close-x{
+    float:right;
+    background:none;border:none;
+    font-size:20px;
+    cursor:pointer;
+    color:var(--ink-soft);
+  }
+  /* Invoice */
+  .invoice-paper{
+    background:#fff;
+    border:1px solid var(--paper-dark);
+    border-radius:10px;
+    padding:20px;
+  }
+  .inv-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    border-bottom:2px solid var(--green-dark);
+    padding-bottom:12px;
+    margin-bottom:14px;
+  }
+  .inv-head .biz{
+    font-family:'Fraunces',serif;
+    font-size:18px;
+    font-weight:600;
+    color:var(--green-dark);
+  }
+  .inv-head .tag{font-size:10.5px; color:var(--ink-soft); letter-spacing:0.5px;}
+  .inv-meta{font-size:12px; text-align:right; color:var(--ink-soft); line-height:1.6;}
+  table.inv-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+    margin-bottom:10px;
+  }
+  table.inv-table th{
+    text-align:left;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    color:var(--ink-soft);
+    border-bottom:1.5px solid var(--paper-dark);
+    padding:6px 4px;
+  }
+  table.inv-table td{
+    padding:7px 4px;
+    border-bottom:1px solid var(--paper-dark);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  table.inv-table td:first-child, table.inv-table th:first-child{font-family:'IBM Plex Sans',sans-serif;}
+  .inv-total{
+    display:flex;
+    justify-content:space-between;
+    padding-top:10px;
+    margin-top:6px;
+    border-top:2px solid var(--green-dark);
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    font-size:16px;
+    color:var(--green-dark);
+  }
+  .inv-stamp{
+    margin-top:18px;
+    text-align:right;
+  }
+  .inv-stamp span{
+    display:inline-block;
+    border:2px solid var(--gold);
+    color:var(--gold);
+    border-radius:50%;
+    width:64px;height:64px;
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:11px;
+    line-height:1.2;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transform:rotate(-8deg);
+  }
+  @media print{
+    body{background:#fff;}
+    header, nav, .fab, .no-print{display:none !important;}
+    .app{box-shadow:none; max-width:100%;}
+    main{padding:0;}
+  }
+  ::-webkit-scrollbar{width:0;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="seal">AD</div>
+      <div class="brand-text">
+        <h1>Anugraha Dairy</h1>
+        <p>Milk Collection Ledger</p>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <button data-view="dashboard" class="active">Dashboard</button>
+    <button data-view="customers">Customers</button>
+    <button data-view="entries">Entries</button>
+    <button data-view="invoice">Invoice</button>
+  </nav>
+
+  <main>
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="stat-row">
+        <div class="stat">
+          <span class="num" id="stat-today-liters">0.0 L</span>
+          <span class="lbl">Today's Collection</span>
+        </div>
+        <div class="stat gold">
+          <span class="num" id="stat-today-amount">₹0</span>
+          <span class="lbl">Today's Amount</span>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Add Today's Entry</h2>
+        <label>Customer</label>
+        <select id="qa-customer"></select>
+        <div class="row2">
+          <div>
+            <label>Date</label>
+            <input type="date" id="qa-date">
+          </div>
+          <div>
+            <label>Liters</label>
+            <input type="number" id="qa-liters" step="0.1" placeholder="0.0">
+          </div>
+        </div>
+        <label>Rate per Liter (₹)</label>
+        <input type="number" id="qa-rate" step="0.5">
+        <button class="btn gold" onclick="addEntry('qa')">Save Entry</button>
+      </div>
+      <div class="card">
+        <h2>Recent Entries</h2>
+        <div id="recent-list"></div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="view" id="view-customers">
+      <div class="card">
+        <h2>Add Customer</h2>
+        <label>Name</label>
+        <input type="text" id="c-name" placeholder="e.g. Ramesh Kumar">
+        <div class="row2">
+          <div>
+            <label>Phone (optional)</label>
+            <input type="text" id="c-phone" placeholder="10-digit number">
+          </div>
+          <div>
+            <label>Default Rate (₹/L)</label>
+            <input type="number" id="c-rate" step="0.5" value="50">
+          </div>
+        </div>
+        <button class="btn" onclick="addCustomer()">Add Customer</button>
+      </div>
+      <div class="card">
+        <h2>All Customers</h2>
+        <div id="customer-list"></div>
+      </div>
+    </div>
+
+    <!-- ENTRIES -->
+    <div class="view" id="view-entries">
+      <div class="card">
+        <h2>Filter</h2>
+        <label>Customer</label>
+        <select id="f-customer"><option value="">All Customers</option></select>
+        <div class="row2">
+          <div>
+            <label>From</label>
+            <input type="date" id="f-from">
+          </div>
+          <div>
+            <label>To</label>
+            <input type="date" id="f-to">
+          </div>
+        </div>
+        <button class="btn outline" onclick="renderEntries()">Apply Filter</button>
+      </div>
+      <div class="card">
+        <h2>Purchase Records</h2>
+        <div id="entries-list"></div>
+      </div>
+    </div>
+
+    <!-- INVOICE -->
+    <div class="view" id="view-invoice">
+      <div class="card no-print">
+        <h2>Generate Invoice</h2>
+        <label>Customer</label>
+        <select id="inv-customer"></select>
+        <div class="row2">
+          <div>
+            <label>From</label>
+            <input type="date" id="inv-from">
+          </div>
+          <div>
+            <label>To</label>
+            <input type="date" id="inv-to">
+          </div>
+        </div>
+        <button class="btn gold" onclick="generateInvoice()">Generate Invoice</button>
+      </div>
+      <div id="invoice-output"></div>
+    </div>
+  </main>
+
+  <div class="fab">
+    <button class="btn" style="display:none" id="fab-print" onclick="window.print()">Print / Save Invoice as PDF</button>
+  </div>
+</div>
+
+<!-- Edit Entry Modal -->
+<div class="modal-bg" id="edit-modal">
+  <div class="modal">
+    <button class="close-x" onclick="closeModal()">&times;</button>
+    <h3>Edit Entry</h3>
+    <input type="hidden" id="edit-id">
+    <label>Customer</label>
+    <select id="edit-customer"></select>
+    <div class="row2">
+      <div>
+        <label>Date</label>
+        <input type="date" id="edit-date">
+      </div>
+      <div>
+        <label>Liters</label>
+        <input type="number" id="edit-liters" step="0.1">
+      </div>
+    </div>
+    <label>Rate per Liter (₹)</label>
+    <input type="number" id="edit-rate" step="0.5">
+    <button class="btn gold" onclick="saveEditEntry()">Save Changes</button>
+    <button class="btn outline" onclick="deleteEntry()" style="margin-top:8px; border-color:var(--red); color:var(--red);">Delete Entry</button>
+  </div>
+</div>
+
+<script>
+let customers = [];
+let entries = [];
+let editingId = null;
+
+function todayStr(){
+  const d = new Date();
+  return d.toISOString().slice(0,10);
+}
+
+async function loadData(){
+  try{
+    const c = localStorage.getItem('anugraha_customers');
+    customers = c ? JSON.parse(c) : [];
+  }catch(e){ customers = []; }
+  try{
+    const e = localStorage.getItem('anugraha_entries');
+    entries = e ? JSON.parse(e) : [];
+  }catch(e){ entries = []; }
+  renderAll();
+}
+
+async function saveCustomers(){
+  localStorage.setItem('anugraha_customers', JSON.stringify(customers));
+}
+async function saveEntries(){
+  localStorage.setItem('anugraha_entries', JSON.stringify(entries));
+}
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+function fmtDate(d){
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'});
+}
+
+function customerName(id){
+  const c = customers.find(x=>x.id===id);
+  return c ? c.name : '(deleted customer)';
+}
+
+// ---------- NAV ----------
+document.querySelectorAll('nav button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+btn.dataset.view).classList.add('active');
+    document.getElementById('fab-print').style.display = btn.dataset.view==='invoice' ? 'block' : 'none';
+  });
+});
+
+// ---------- CUSTOMERS ----------
+async function addCustomer(){
+  const name = document.getElementById('c-name').value.trim();
+  const phone = document.getElementById('c-phone').value.trim();
+  const rate = parseFloat(document.getElementById('c-rate').value) || 0;
+  if(!name){ alert('Please enter a customer name'); return; }
+  customers.push({id: uid(), name, phone, rate});
+  await saveCustomers();
+  document.getElementById('c-name').value='';
+  document.getElementById('c-phone').value='';
+  document.getElementById('c-rate').value='50';
+  renderAll();
+}
+
+async function removeCustomer(id){
+  if(!confirm('Remove this customer? Their past entries will be kept but marked as deleted customer.')) return;
+  customers = customers.filter(c=>c.id!==id);
+  await saveCustomers();
+  renderAll();
+}
+
+function renderCustomerList(){
+  const el = document.getElementById('customer-list');
+  if(customers.length===0){
+    el.innerHTML = '<div class="empty"><span class="big">🐄</span>No customers yet. Add your first customer above.</div>';
+    return;
+  }
+  el.innerHTML = customers.map(c=>{
+    const totalLiters = entries.filter(e=>e.customerId===c.id).reduce((s,e)=>s+e.liters,0);
+    return `<div class="list-item">
+      <div class="li-main">
+        <div class="name">${escapeHtml(c.name)}</div>
+        <div class="sub">${c.phone ? c.phone+' · ' : ''}₹${c.rate}/L · ${totalLiters.toFixed(1)}L total</div>
+      </div>
+      <div class="li-right">
+        <button class="icon-btn" onclick="removeCustomer('${c.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// ---------- populate selects ----------
+function populateCustomerSelects(){
+  const opts = customers.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+  document.getElementById('qa-customer').innerHTML = opts || '<option value="">Add a customer first</option>';
+  document.getElementById('edit-customer').innerHTML = opts;
+  document.getElementById('inv-customer').innerHTML = opts || '<option value="">Add a customer first</option>';
+  document.getElementById('f-customer').innerHTML = '<option value="">All Customers</option>' + opts;
+}
+
+document.getElementById('qa-customer').addEventListener('change', (e)=>{
+  const c = customers.find(x=>x.id===e.target.value);
+  if(c) document.getElementById('qa-rate').value = c.rate;
+});
+
+// ---------- ENTRIES ----------
+async function addEntry(prefix){
+  const customerId = document.getElementById(prefix+'-customer').value;
+  const date = document.getElementById(prefix+'-date').value || todayStr();
+  const liters = parseFloat(document.getElementById(prefix+'-liters').value);
+  const rate = parseFloat(document.getElementById(prefix+'-rate').value);
+  if(!customerId){ alert('Please select or add a customer first'); return; }
+  if(!liters || liters<=0){ alert('Please enter liters purchased'); return; }
+  if(!rate || rate<=0){ alert('Please enter the rate per liter'); return; }
+  entries.push({id: uid(), customerId, date, liters, rate, amount: +(liters*rate).toFixed(2)});
+  await saveEntries();
+  document.getElementById(prefix+'-liters').value='';
+  renderAll();
+}
+
+async function deleteEntry(){
+  entries = entries.filter(e=>e.id!==editingId);
+  await saveEntries();
+  closeModal();
+  renderAll();
+}
+
+function openEditModal(id){
+  const e = entries.find(x=>x.id===id);
+  if(!e) return;
+  editingId = id;
+  document.getElementById('edit-customer').value = e.customerId;
+  document.getElementById('edit-date').value = e.date;
+  document.getElementById('edit-liters').value = e.liters;
+  document.getElementById('edit-rate').value = e.rate;
+  document.getElementById('edit-modal').classList.add('active');
+}
+function closeModal(){
+  document.getElementById('edit-modal').classList.remove('active');
+  editingId = null;
+}
+async function saveEditEntry(){
+  const e = entries.find(x=>x.id===editingId);
+  if(!e) return;
+  e.customerId = document.getElementById('edit-customer').value;
+  e.date = document.getElementById('edit-date').value;
+  e.liters = parseFloat(document.getElementById('edit-liters').value) || 0;
+  e.rate = parseFloat(document.getElementById('edit-rate').value) || 0;
+  e.amount = +(e.liters*e.rate).toFixed(2);
+  await saveEntries();
+  closeModal();
+  renderAll();
+}
+
+function renderRecent(){
+  const el = document.getElementById('recent-list');
+  const sorted = [...entries].sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id)).slice(0,6);
+  if(sorted.length===0){
+    el.innerHTML = '<div class="empty"><span class="big">🥛</span>No entries yet today.</div>';
+    return;
+  }
+  el.innerHTML = sorted.map(e=>`
+    <div class="list-item" onclick="openEditModal('${e.id}')" style="cursor:pointer;">
+      <div class="li-main">
+        <div class="name">${escapeHtml(customerName(e.customerId))}</div>
+        <div class="sub">${fmtDate(e.date)} · ${e.liters}L @ ₹${e.rate}</div>
+      </div>
+      <div class="li-right"><div class="amt">₹${e.amount}</div></div>
+    </div>`).join('');
+}
+
+function renderEntries(){
+  const el = document.getElementById('entries-list');
+  const custFilter = document.getElementById('f-customer').value;
+  const from = document.getElementById('f-from').value;
+  const to = document.getElementById('f-to').value;
+  let list = [...entries];
+  if(custFilter) list = list.filter(e=>e.customerId===custFilter);
+  if(from) list = list.filter(e=>e.date >= from);
+  if(to) list = list.filter(e=>e.date <= to);
+  list.sort((a,b)=> b.date.localeCompare(a.date));
+
+  if(list.length===0){
+    el.innerHTML = '<div class="empty"><span class="big">📋</span>No records match this filter.</div>';
+    return;
+  }
+  const totalL = list.reduce((s,e)=>s+e.liters,0);
+  const totalA = list.reduce((s,e)=>s+e.amount,0);
+  el.innerHTML = `<div class="list-item" style="font-weight:600;">
+      <div class="li-main"><div class="sub">${list.length} records</div></div>
+      <div class="li-right"><div class="amt">${totalL.toFixed(1)}L · ₹${totalA.toFixed(0)}</div></div>
+    </div>` +
+    list.map(e=>`
+    <div class="list-item" onclick="openEditModal('${e.id}')" style="cursor:pointer;">
+      <div class="li-main">
+        <div class="name">${escapeHtml(customerName(e.customerId))}</div>
+        <div class="sub">${fmtDate(e.date)} · ${e.liters}L @ ₹${e.rate}</div>
+      </div>
+      <div class="li-right"><div class="amt">₹${e.amount}</div></div>
+    </div>`).join('');
+}
+
+// ---------- INVOICE ----------
+function generateInvoice(){
+  const customerId = document.getElementById('inv-customer').value;
+  const from = document.getElementById('inv-from').value;
+  const to = document.getElementById('inv-to').value;
+  const out = document.getElementById('invoice-output');
+  if(!customerId){ alert('Please select a customer'); return; }
+  if(!from || !to){ alert('Please select a date range'); return; }
+
+  const cust = customers.find(c=>c.id===customerId);
+  let list = entries.filter(e=> e.customerId===customerId && e.date>=from && e.date<=to);
+  list.sort((a,b)=>a.date.localeCompare(b.date));
+
+  document.getElementById('fab-print').style.display = 'block';
+
+  if(list.length===0){
+    out.innerHTML = '<div class="card"><div class="empty"><span class="big">🧾</span>No purchases found for this customer in the selected dates.</div></div>';
+    return;
+  }
+  const totalL = list.reduce((s,e)=>s+e.liters,0);
+  const totalA = list.reduce((s,e)=>s+e.amount,0);
+  const invNo = 'AD-' + from.replace(/-/g,'') + '-' + customerId.slice(-4).toUpperCase();
+
+  out.innerHTML = `
+  <div class="invoice-paper">
+    <div class="inv-head">
+      <div>
+        <div class="biz">Anugraha Dairy</div>
+        <div class="tag">MILK COLLECTION INVOICE</div>
+      </div>
+      <div class="inv-meta">
+        Invoice #${invNo}<br>
+        ${fmtDate(from)} – ${fmtDate(to)}<br>
+        Issued: ${fmtDate(todayStr())}
+      </div>
+    </div>
+    <div style="margin-bottom:12px; font-size:13.5px;">
+      <strong>Billed to:</strong> ${escapeHtml(cust.name)}${cust.phone ? ' · '+escapeHtml(cust.phone) : ''}
+    </div>
+    <table class="inv-table">
+      <thead><tr><th>Date</th><th>Liters</th><th>Rate</th><th>Amount</th></tr></thead>
+      <tbody>
+        ${list.map(e=>`<tr><td>${fmtDate(e.date)}</td><td>${e.liters.toFixed(1)}</td><td>₹${e.rate}</td><td>₹${e.amount.toFixed(2)}</td></tr>`).join('')}
+      </tbody>
+    </table>
+    <div class="inv-total"><span>Total (${totalL.toFixed(1)} L)</span><span>₹${totalA.toFixed(2)}</span></div>
+    <div class="inv-stamp"><span>ANUGRAHA<br>DAIRY</span></div>
+  </div>`;
+}
+
+// ---------- RENDER ALL ----------
+function renderAll(){
+  populateCustomerSelects();
+  renderCustomerList();
+  renderRecent();
+  renderEntries();
+  updateTodayStats();
+}
+
+function updateTodayStats(){
+  const t = todayStr();
+  const todays = entries.filter(e=>e.date===t);
+  const liters = todays.reduce((s,e)=>s+e.liters,0);
+  const amount = todays.reduce((s,e)=>s+e.amount,0);
+  document.getElementById('stat-today-liters').textContent = liters.toFixed(1)+' L';
+  document.getElementById('stat-today-amount').textContent = '₹'+amount.toFixed(0);
+}
+
+// init default dates
+document.getElementById('qa-date').value = todayStr();
+document.getElementById('inv-from').value = todayStr().slice(0,8)+'01';
+document.getElementById('inv-to').value = todayStr();
+
+loadData();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
